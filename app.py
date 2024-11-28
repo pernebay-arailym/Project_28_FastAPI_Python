@@ -24,6 +24,6 @@ inventory = {
     }
 }
 
-@app.get("/get-item/{item_id}") #based on id return smth, id can be anythinght else
-def get_item(item_id: int):
+@app.get("/get-item/{item_id}/{name}") #based on id return smth, id can be anythinght else
+def get_item(item_id: int, name: str):
     return inventory[item_id]
