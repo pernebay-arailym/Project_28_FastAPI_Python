@@ -9,4 +9,4 @@ app = FastAPI () # create api object
 
 @app.get("/") # define root
 def home(): # created function
-    return  {"Data": "Test"} #python info - data
+    return  {"Data": "Testing"} #python info - data
