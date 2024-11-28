@@ -1,7 +1,13 @@
 from fastapi import FastAPI, Path
 from typing import Optional
+from pydantic import BaseModel
 
 app = FastAPI () # create api object
+
+class Item(BaseModel):
+    name: str
+    price: float
+    brand: Optional[str]=None
 
 # GET GET AND RETURN SMTH
 
@@ -29,9 +35,13 @@ inventory = {
 def get_item(item_id: int = Path(..., description="The ID of the item you would like to view")): #path-info for item id
     return inventory[item_id]
 
-@app.get("/get-by-name")
-def get_item(name: Optional[str] = None):
+@app.get("/get-by-name/{item_id}")
+def get_item(*, item_id:int, name: Optional[str] = None, test: int):
     for item_id in inventory:
         if inventory[item_id]["name"] == name:
             return inventory[item_id]
     return {"Data": "Not found"}
+
+@app.post("/create-item")
+def create_item(item: Item):
+    return {}
