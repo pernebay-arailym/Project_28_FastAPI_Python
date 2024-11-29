@@ -64,3 +64,10 @@ def update_item(item_id: int, item: UpdateItem):
         inventory[item_id].brand = item.brand
 
     return inventory[item_id]
+
+@app.delete("/delete-item")
+def delete_item(item_id: int=Query(..., description="The ID of the item to delete.")):
+    if item_id not in inventory:
+        return {"Error": "ID does not exists."}
+    
+    del inventory[item_id]
