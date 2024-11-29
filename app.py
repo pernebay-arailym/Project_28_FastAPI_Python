@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Query
 from typing import Optional
 from pydantic import BaseModel
 
@@ -23,25 +23,23 @@ class Item(BaseModel):
 # PUT 
 # DELETE
 
-inventory = {
-    1: {
-        "name": "Milk",
-        "price": 3.99,
-        "brand": "Regular"
-    }
-}
+inventory = {}
 
 @app.get("/get-item/{item_id}") #based on id return smth, id can be anythinght else
 def get_item(item_id: int = Path(..., description="The ID of the item you would like to view")): #path-info for item id
     return inventory[item_id]
 
-@app.get("/get-by-name/{item_id}")
-def get_item(*, item_id:int, name: Optional[str] = None, test: int):
+@app.get("/get-by-name")
+def get_item(name: str=Query(None, title="Name", description="Name of item.", max_length=50)):
     for item_id in inventory:
-        if inventory[item_id]["name"] == name:
+        if inventory[item_id].name== name:
             return inventory[item_id]
     return {"Data": "Not found"}
 
-@app.post("/create-item")
-def create_item(item: Item):
-    return {}
+@app.post("/create-item/{item_id}")
+def create_item(item_id: int, item: Item):
+    if item_id in inventory:
+        return {"Error": "Item ID already exists."}
+    
+    inventory[item_id]= item #{"name": item.name, "brand": item.brand, "price": item.price}
+    return inventory[item_id]
