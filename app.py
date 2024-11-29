@@ -71,7 +71,7 @@ def update_item(item_id: int, item: UpdateItem):
 @app.delete("/delete-item")
 def delete_item(item_id: int=Query(..., description="The ID of the item to delete.")):
     if item_id not in inventory:
-        #return {"Error": "ID does not exists."}
+        #return {"Error": "ID does not exists."} #use status codes and error responses
         raise HTTPException(status_code=404, detail="Item ID does not exist.")
     
     del inventory[item_id]
